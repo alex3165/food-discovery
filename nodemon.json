@@ -2,5 +2,5 @@
   "watch": ["api"],
   "ext": "ts",
   "ignore": ["api/**/*.spec.ts"],
-  "exec": "ts-node -Ptsconfig-api.json ./api/index.ts"
+  "exec": "ts-node -P tsconfig-api.json ./api/index.ts"
 }

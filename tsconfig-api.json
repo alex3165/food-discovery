@@ -1,0 +1,16 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "sourceMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "module": "commonjs",
+    "target": "ES5",
+    "noImplicitAny": true,
+    "importHelpers": true,
+    "rootDir": "./api",
+    "outDir": "./api-dist",
+    "lib": ["es2017", "dom"],
+    "types": ["node", "jest"]
+  }
+}

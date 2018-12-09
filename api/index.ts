@@ -4,6 +4,8 @@ import { createVenueHandler, getVenueHandler } from "./handlers/venue";
 import { initModels } from "./models";
 import * as bodyParser from "body-parser";
 import { createReviewHandler } from "./handlers/review";
+import { getClients } from "./clients/auth0";
+import { config } from "./config";
 
 const app = express();
 const port = 3000;
@@ -19,6 +21,24 @@ initModels()
     throw new Error(err);
   });
 
+// domain: string,
+// client_id: string,
+// client_secret: string,
+// authzIdentifier: string,
+// managementIdentifier: string,
+// extension: string
+
+getClients(
+  config.auth0Domain,
+  config.auth0ClientID,
+  config.auth0ClientSecret,
+  undefined,
+  config.auth0ManagementIdentifier,
+  config.auth0Extension
+).then(({ managementClient }) => {
+  app.post("/v1/user/login", loginHandler(managementClient));
+});
+
 /**
 
 - POST /v1/login
@@ -28,8 +48,6 @@ initModels()
 - POST /v1/venue
 
 */
-
-app.post("/v1/user/login", loginHandler);
 
 // Venues
 app.post("/v1/venue", createVenueHandler);

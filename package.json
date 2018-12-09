@@ -7,7 +7,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "start:api": "nodemon",
+    "start:api": "env $(xargs < .env) nodemon",
     "build:api": "tsc -p tsconfig-api.json"
   },
   "repository": {

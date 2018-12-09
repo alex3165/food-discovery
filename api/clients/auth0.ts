@@ -1,7 +1,12 @@
 import { ManagementClient } from "auth0";
 import * as rp from "request-promise";
 
-const identify = (domain, id, secret, audience) =>
+const identify = (
+  domain: string,
+  id: string,
+  secret: string,
+  audience: string
+) =>
   rp({
     method: "POST",
     url: `https://${domain}/oauth/token`,
@@ -15,7 +20,7 @@ const identify = (domain, id, secret, audience) =>
     json: true
   });
 
-const getAuthzBuilder = (extension, token) => (
+const getAuthzBuilder = (extension: string, token: string) => (
   endpoint,
   method = "GET",
   body = {}
@@ -35,15 +40,15 @@ export interface Auth0Clients {
   managementClient: ManagementClient;
 }
 
-const getClients = (
-  domain,
-  client_id,
-  client_secret,
-  authzIdentifier,
-  managementIdentifier,
-  extension
+export const getClients = (
+  domain: string,
+  client_id: string,
+  client_secret: string,
+  authzIdentifier: string | undefined,
+  managementIdentifier: string,
+  extension: string
 ) => {
-  const promises = [];
+  const promises: rp.RequestPromise[] = [];
   if (authzIdentifier) {
     promises.push(identify(domain, client_id, client_secret, authzIdentifier));
   }
@@ -70,8 +75,4 @@ const getClients = (
 
     return res;
   });
-};
-
-module.exports = {
-  getClients
 };

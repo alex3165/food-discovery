@@ -5,12 +5,15 @@
     "strict": true,
     "noUnusedLocals": true,
     "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "target": "ES5",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "importHelpers": true,
     "rootDir": "./api",
     "outDir": "./api-dist",
     "lib": ["es2017", "dom"],
     "types": ["node", "jest"]
-  }
+  },
+  "include": ["api"]
 }

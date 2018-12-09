@@ -1,5 +1,5 @@
-import { ManagementClient, AuthenticationClient } from "auth0";
-import rp from "request-promise";
+import { ManagementClient } from "auth0";
+import * as rp from "request-promise";
 
 const identify = (domain, id, secret, audience) =>
   rp({

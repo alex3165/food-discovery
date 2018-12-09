@@ -1,5 +1,5 @@
 {
-  "watch": ["api"],
+  "watch": ["api/**/*.ts"],
   "ext": "ts",
   "ignore": ["api/**/*.spec.ts"],
   "exec": "ts-node -P tsconfig-api.json ./api/index.ts"

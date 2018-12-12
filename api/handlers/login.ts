@@ -1,11 +1,19 @@
 import { Request, Response } from "express";
-import { ManagementClient } from "auth0";
+import { AuthenticationClient } from "auth0";
 
-const loginHandler = (managementClient: ManagementClient) => (
+const loginHandler = (authClient: AuthenticationClient) => (
   req: Request,
   res: Response
 ) => {
-  res.status(200).send({ hello: "world" });
+  authClient
+    .clientCredentialsGrant({ audience: "food-discovery" })
+    .then(response => {
+      console.log(response);
+      res.status(200).send({ hello: "world" });
+    })
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 export default loginHandler;

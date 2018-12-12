@@ -33,10 +33,10 @@ getClients(
   config.auth0ClientID,
   config.auth0ClientSecret,
   undefined,
-  config.auth0ManagementIdentifier,
+  undefined,
   config.auth0Extension
-).then(({ managementClient }) => {
-  app.post("/v1/user/login", loginHandler(managementClient));
+).then(({ authenticationClient }) => {
+  app.post("/v1/user/login", loginHandler(authenticationClient));
 });
 
 /**

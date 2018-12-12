@@ -1,4 +1,4 @@
-import { ManagementClient } from "auth0";
+import { ManagementClient, AuthenticationClient } from "auth0";
 import * as rp from "request-promise";
 
 const identify = (
@@ -38,15 +38,16 @@ const getAuthzBuilder = (extension: string, token: string) => (
 export interface Auth0Clients {
   authz: (endpoint: string, method?: string, body?: any) => rp.RequestPromise;
   managementClient: ManagementClient;
+  authenticationClient: AuthenticationClient;
 }
 
 export const getClients = (
   domain: string,
   client_id: string,
   client_secret: string,
-  authzIdentifier: string | undefined,
-  managementIdentifier: string,
-  extension: string
+  authzIdentifier?: string,
+  managementIdentifier?: string,
+  extension?: string
 ) => {
   const promises: rp.RequestPromise[] = [];
   if (authzIdentifier) {
@@ -62,9 +63,15 @@ export const getClients = (
   return Promise.all(promises).then(([authz, management]) => {
     const res: Auth0Clients = {} as any;
 
-    if (authz) {
+    if (authz && extension) {
       res.authz = getAuthzBuilder(extension, authz.access_token);
     }
+
+    res.authenticationClient = new AuthenticationClient({
+      clientId: client_id,
+      clientSecret: client_secret,
+      domain
+    });
 
     if (management) {
       res.managementClient = new ManagementClient({

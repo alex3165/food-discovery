@@ -8,7 +8,8 @@ export const createReviewHandler = (req: Request, res: Response) => {
   return putReview({
     id: uuidv1(),
     date: req.body.date || moment().format(),
-    ...req.body
+    ...req.body,
+    userId: res.locals.profile.sub
   })
     .then(data => {
       res.status(200).send({ data });
@@ -17,4 +18,8 @@ export const createReviewHandler = (req: Request, res: Response) => {
       console.error(err);
       res.status(500).send({ message: "Couldn't create review" });
     });
+};
+
+export const getHotReviewsHandler = (req: Request, res: Response) => {
+  return;
 };

@@ -6,6 +6,7 @@ import * as bodyParser from "body-parser";
 import { createReviewHandler } from "./handlers/review";
 import { getClients } from "./clients/auth0";
 import { config } from "./config";
+import { decode } from "jsonwebtoken";
 
 const app = express();
 const port = 3000;
@@ -20,13 +21,6 @@ initModels()
     console.error("Couldn't create models");
     throw new Error(err);
   });
-
-// domain: string,
-// client_id: string,
-// client_secret: string,
-// authzIdentifier: string,
-// managementIdentifier: string,
-// extension: string
 
 getClients(
   config.auth0Domain,
@@ -43,18 +37,37 @@ getClients(
 
 - POST /v1/login
 - POST /v1/logout
-- GET /v1/venues/hot (with filters)
+
 - GET /v1/venues/:userId
 - POST /v1/venue
 
+- GET /v1/reviews/hot
+- 
+
 */
 
+const withAuth = (req: express.Request, res: express.Response, next) => {
+  if (!req.headers.authorization) {
+    res
+      .status(401)
+      .send({ message: "Unhautorized, please provide a valid auth token" });
+  }
+
+  // TODO: verify token
+  const userProfile = decode(req.headers.authorization!.replace("Bearer ", ""));
+
+  res.locals["profile"] = userProfile;
+
+  next();
+};
+
 // Venues
-app.post("/v1/venue", createVenueHandler);
+app.post("/v1/venue", withAuth, createVenueHandler);
 app.get("/v1/venue/:id", getVenueHandler);
 
 // Reviews
-app.post("/v1/review", createReviewHandler);
+app.post("/v1/review", withAuth, createReviewHandler);
+// app.get("/v1/reviews/hot", getHotReviewsHandler);
 
 app.listen(port, () =>
   console.log(`Food discovery app listening on port ${port}!`)

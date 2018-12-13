@@ -8,6 +8,7 @@ export interface VenueModel {
   facebookURL?: string;
   websiteURL?: string;
   googleMapURL?: string;
+  createdAt: number;
   coordinates: {
     latitude: number;
     longitude: number;

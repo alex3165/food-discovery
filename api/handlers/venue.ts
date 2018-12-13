@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { putVenue } from "../models/venue";
 import * as uuidv1 from "uuid/v1";
+import moment = require("moment");
 
 export const createVenueHandler = (req: Request, res: Response) => {
   putVenue({
     id: uuidv1(),
+    createdAt: moment().unix(),
     ...req.body
   })
     .then(data => {

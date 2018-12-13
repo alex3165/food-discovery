@@ -7,7 +7,7 @@ import * as moment from "moment";
 export const createReviewHandler = (req: Request, res: Response) => {
   return putReview({
     id: uuidv1(),
-    date: req.body.date || moment().format(),
+    createdAt: moment().unix(),
     ...req.body,
     userId: res.locals.profile.sub
   })

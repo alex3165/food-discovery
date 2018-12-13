@@ -6,7 +6,7 @@ export interface ReviewModel {
   userId: string;
 
   rating: number; // 0 - 5
-  date: string;
+  createdAt: string;
   title: string;
   description: string;
   instagramURL?: string;

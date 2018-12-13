@@ -1,4 +1,5 @@
-import { initTable, putItem } from "../db";
+import { initTable, putItem, scanItems } from "../db";
+import moment = require("moment");
 
 export interface ReviewModel {
   id: string;
@@ -6,7 +7,7 @@ export interface ReviewModel {
   userId: string;
 
   rating: number; // 0 - 5
-  createdAt: string;
+  createdAt: number;
   title: string;
   description: string;
   instagramURL?: string;
@@ -19,12 +20,20 @@ const table = {
     {
       AttributeName: "id",
       AttributeType: "S"
+    },
+    {
+      AttributeName: "createdAt",
+      AttributeType: "N"
     }
   ],
   KeySchema: [
     {
       AttributeName: "id",
       KeyType: "HASH"
+    },
+    {
+      AttributeName: "createdAt",
+      KeyType: "RANGE"
     }
   ],
   TableName: tableName,
@@ -44,4 +53,22 @@ export const putReview = (review: ReviewModel) => {
   });
 };
 
+const scanParams = {
+  TableName: "REVIEWS",
+  ProjectionExpression: "#ca",
+  FilterExpression: "#ca between :start_yr and :end_yr",
+  ExpressionAttributeNames: {
+    "#ca": "createdAt"
+  },
+  ExpressionAttributeValues: {
+    ":start_yr": moment()
+      .subtract(1, "year")
+      .unix(),
+    ":end_yr": moment()
+      .add(1, "year")
+      .unix()
+  }
+};
+
+export const getHotReview = () => scanItems(scanParams);
 export const initReviews = () => initTable(tableName, table);

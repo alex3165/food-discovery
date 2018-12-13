@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { putReview } from "../models/review";
+import { putReview, getHotReview } from "../models/review";
 import * as uuidv1 from "uuid/v1";
 import * as moment from "moment";
 
@@ -21,5 +21,13 @@ export const createReviewHandler = (req: Request, res: Response) => {
 };
 
 export const getHotReviewsHandler = (req: Request, res: Response) => {
-  return;
+  return getHotReview()
+    .then(data => {
+      console.log(data);
+      res.status(200).send({});
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send({});
+    });
 };

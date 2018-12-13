@@ -3,7 +3,7 @@ import loginHandler from "./handlers/login";
 import { createVenueHandler, getVenueHandler } from "./handlers/venue";
 import { initModels } from "./models";
 import * as bodyParser from "body-parser";
-import { createReviewHandler } from "./handlers/review";
+import { createReviewHandler, getHotReviewsHandler } from "./handlers/review";
 import { getClients } from "./clients/auth0";
 import { config } from "./config";
 import { decode } from "jsonwebtoken";
@@ -67,7 +67,7 @@ app.get("/v1/venue/:id", getVenueHandler);
 
 // Reviews
 app.post("/v1/review", withAuth, createReviewHandler);
-// app.get("/v1/reviews/hot", getHotReviewsHandler);
+app.get("/v1/reviews/hot", getHotReviewsHandler);
 
 app.listen(port, () =>
   console.log(`Food discovery app listening on port ${port}!`)

@@ -29,7 +29,21 @@ export const getItemById = (
   });
 };
 
-export const putItem = <T = any>(params: DocumentClient.PutItemInput): Promise<T> => {
+export const scanItems = (params: DocumentClient.ScanInput) => {
+  return new Promise((res, rej) => {
+    docClient.scan(params, (err, data) => {
+      if (err) {
+        return rej(err);
+      }
+
+      return res(data);
+    });
+  });
+};
+
+export const putItem = <T = any>(
+  params: DocumentClient.PutItemInput
+): Promise<T> => {
   return new Promise((res, rej) => {
     docClient.put(params, (err, data) => {
       if (err) {

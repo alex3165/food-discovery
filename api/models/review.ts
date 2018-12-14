@@ -18,21 +18,21 @@ const tableName = "REVIEWS";
 const table = {
   AttributeDefinitions: [
     {
-      AttributeName: "id",
+      AttributeName: "venueId",
       AttributeType: "S"
     },
     {
-      AttributeName: "createdAt",
-      AttributeType: "N"
+      AttributeName: "id",
+      AttributeType: "S"
     }
   ],
   KeySchema: [
     {
-      AttributeName: "id",
+      AttributeName: "venueId",
       KeyType: "HASH"
     },
     {
-      AttributeName: "createdAt",
+      AttributeName: "id",
       KeyType: "RANGE"
     }
   ],

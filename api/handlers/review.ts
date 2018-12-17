@@ -22,12 +22,11 @@ export const createReviewHandler = (req: Request, res: Response) => {
 
 export const getHotReviewsHandler = (req: Request, res: Response) => {
   return getHotReview()
-    .then(data => {
-      console.log(data);
-      res.status(200).send({});
+    .then(reviews => {
+      res.status(200).send({ data: reviews });
     })
     .catch(err => {
       console.log(err);
-      res.status(500).send({});
+      res.status(500).send({ message: "Couldn't retrieve hot reviews" });
     });
 };

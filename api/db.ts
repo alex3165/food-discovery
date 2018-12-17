@@ -30,15 +30,7 @@ export const getItemById = (
 };
 
 export const scanItems = (params: DocumentClient.ScanInput) => {
-  return new Promise((res, rej) => {
-    docClient.scan(params, (err, data) => {
-      if (err) {
-        return rej(err);
-      }
-
-      return res(data);
-    });
-  });
+  return docClient.scan(params).promise();
 };
 
 export const putItem = <T = any>(

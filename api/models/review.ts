@@ -1,5 +1,4 @@
 import { initTable, putItem, scanItems } from "../db";
-import moment = require("moment");
 
 export interface ReviewModel {
   id: string;
@@ -18,22 +17,14 @@ const tableName = "REVIEWS";
 const table = {
   AttributeDefinitions: [
     {
-      AttributeName: "venueId",
-      AttributeType: "S"
-    },
-    {
       AttributeName: "id",
       AttributeType: "S"
     }
   ],
   KeySchema: [
     {
-      AttributeName: "venueId",
-      KeyType: "HASH"
-    },
-    {
       AttributeName: "id",
-      KeyType: "RANGE"
+      KeyType: "HASH"
     }
   ],
   TableName: tableName,
@@ -54,21 +45,18 @@ export const putReview = (review: ReviewModel) => {
 };
 
 const scanParams = {
-  TableName: "REVIEWS",
-  ProjectionExpression: "#ca",
-  FilterExpression: "#ca between :start_yr and :end_yr",
-  ExpressionAttributeNames: {
-    "#ca": "createdAt"
-  },
-  ExpressionAttributeValues: {
-    ":start_yr": moment()
-      .subtract(1, "year")
-      .unix(),
-    ":end_yr": moment()
-      .add(1, "year")
-      .unix()
-  }
+  TableName: "REVIEWS"
 };
 
-export const getHotReview = () => scanItems(scanParams);
+export const getHotReview = (offset: number = 1, length: number = 20) =>
+  scanItems(scanParams).then(res => {
+    if (res.Items) {
+      return res.Items.filter((_, index) => {
+        return index >= (offset - 1) * length && index <= offset * length;
+      }) as ReviewModel[];
+    }
+
+    return [];
+  });
+
 export const initReviews = () => initTable(tableName, table);

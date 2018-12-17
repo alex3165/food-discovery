@@ -1,4 +1,4 @@
-import { initTable, putItem } from "../db";
+import { initTable, putItem, getBatchItems } from "../db";
 
 export interface VenueModel {
   id: string;
@@ -45,6 +45,12 @@ export const putVenue = (venue: VenueModel) => {
     Item: venue,
     TableName: tableName
   });
+};
+
+export const getBatchVenues = (venueIds: string[]) => {
+  return getBatchItems(venueIds, tableName).then(res =>
+    res && res.Responses ? (res.Responses[tableName] as VenueModel[]) : []
+  );
 };
 
 export const initVenues = () => initTable(tableName, table);

@@ -29,6 +29,18 @@ export const getItemById = (
   });
 };
 
+export const getBatchItems = (ids: string[], tableName: string) => {
+  const params = {
+    RequestItems: {
+      [tableName]: {
+        Keys: ids.map(id => ({ id }))
+      }
+    }
+  };
+
+  return docClient.batchGet(params).promise();
+};
+
 export const scanItems = (params: DocumentClient.ScanInput) => {
   return docClient.scan(params).promise();
 };
